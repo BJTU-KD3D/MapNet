@@ -1,0 +1,56 @@
+DATA:
+  data_name: s3dis
+  data_root: /home/hy/pointctm/dataset/s3dis/data/stanford_indoor3d/
+  test_area: 5
+  classes: 13
+  fea_dim: 6
+  voxel_size: 0.04
+  voxel_max: 80000
+  loop: 30
+
+TRAIN:
+  arch: weak
+  use_xyz: True
+  sync_bn: False
+  ignore_label: 255
+  train_gpu: [0]  # 修改为实际可用的GPU ID
+  workers: 2  # 总workers数(每GPU 2)
+  batch_size: 16  # 总batch size(每GPU 4)
+  batch_size_val: 2
+  base_lr: 0.0001  # 进一步降低学习率以提高蒸馏训练稳定性
+  epochs: 100
+  start_epoch: 0
+  step_epoch: 30
+  multiplier: 0.1
+  momentum: 0.9
+  weight_decay: 0.01  # 调整权重衰减
+  drop_rate: 0.3  # 增加dropout率
+  manual_seed: 42  # 更改随机种子
+  print_freq: 1
+  save_freq: 1
+  save_path:  /home/hy/pointctm/output/s3dis
+  weight:  # path to initial weight (default: none)
+  resume: 
+  evaluate: True  # evaluate on validation set, extra gpu memory needed and small batch_size_val is recommend
+  eval_freq: 1
+  labeled_point: 0.02%
+  # 添加类别权重以处理类别不平衡
+  class_weights: [1.0, 1.5, 2.0, 2.0, 1.5, 1.5, 2.0, 2.5, 2.0, 2.0, 2.0, 2.0, 1.0]
+  
+Distributed:
+  dist_url: 'tcp://127.0.0.1:23456'
+  dist_backend: 'nccl'
+  multiprocessing_distributed: Flase
+  world_size: 1  # 单机
+  rank: 0
+
+TEST:
+  test_list: /home/hy/pointctm/dataset/s3dis
+  test_list_full: # applied only to s3dis: val5_full.txt
+  split: val  # split in [train, val and test]
+  test_gpu: [1]  # 修改为实际可用的GPU ID
+  test_workers: 2
+  batch_size_test: 2
+  model_path: /home/hy/pointctm/output/s3dis/model_best.pth
+  save_folder: /home/hy/pointctm/output/s3dis/model
+  names_path: /home/hy/pointctm/dataset/s3dis/s3dis_names.txt
