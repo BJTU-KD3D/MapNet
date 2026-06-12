@@ -21,7 +21,7 @@ MapNet follows an encoder-decoder design built from three core modules that are 
 - Python: 3.7
 - PyTorch: 1.10.1 
 - CUDA: 11.3
-- Hardware: NVIDIA RTX 3060 (or higher)
+- Hardware: NVIDIA RTX 3080 (or higher)
 
 ## Environment
 
